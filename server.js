@@ -8,7 +8,6 @@ sequelize
   .authenticate()
   .then(() => console.log('Database authenticated'))
   .catch((err) => console.log(err));
-
   
 // Models relations
 initModels();
