@@ -19,7 +19,6 @@ const actorsInMovies = db.define(
 			allowNull: false,
 		}
 	},
-	{ timestamps: false }
 );
 
 module.exports = { actorsInMovies };

@@ -12,12 +12,15 @@ const users = db.define(
 		},
 		userName: {
 			type: DataTypes.STRING(255),
+			allowNull: false
 		},
         email: {
 			type: DataTypes.STRING(255),
+			unique: true
 		},
         password: {
 			type: DataTypes.STRING(255),
+			allowNull: false,
 		},
 		status: {
 			type: DataTypes.STRING(15),

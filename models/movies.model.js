@@ -18,15 +18,21 @@ const movies = db.define(
 		},
         duration: {
 			type: DataTypes.NUMBER(5),
+			allowNull: false,
+			defaultValue: 0
 		},
         rating: {
 			type: DataTypes.NUMBER(5),
+			allowNull: false,
+			defaultValue: 1
 		},
         img: {
 			type: DataTypes.STRING(255),
+			allowNull: false
 		},
         genere: {
 			type: DataTypes.STRING(255),
+			allowNull: false
 		},
 		status: {
 			type: DataTypes.STRING(15),

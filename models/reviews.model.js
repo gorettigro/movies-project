@@ -12,12 +12,16 @@ const reviews = db.define(
 		},
 		tittle: {
 			type: DataTypes.STRING(255),
+			allowNull: false
 		},
         comment: {
 			type: DataTypes.STRING(255),
+			allowNull: false
 		},
         rating: {
 			type: DataTypes.NUMBER(255),
+			allowNull: false,
+			defaultValue: 1
 		},
 		status: {
 			type: DataTypes.STRING(15),
