@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { db } = require('../utils/database');
 
-const actors = db.define(
+const Actor = db.define(
 	'actors',
 	{
 		id: {
@@ -39,4 +39,4 @@ const actors = db.define(
 	{ timestamps: false }
 );
 
-module.exports = { actors };
+module.exports = { Actor };

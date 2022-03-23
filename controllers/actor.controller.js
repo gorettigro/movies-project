@@ -17,7 +17,6 @@ exports.getAllUsers = catchAsync(
             include: [
                 {
                     model: Actor,
-                    attributes: { exclude: ['password'] },
                 },
             ],
         });
@@ -31,24 +30,24 @@ exports.getAllUsers = catchAsync(
 // Get actors by id
 exports.getActorById = catchAsync(
     async (req, res, next) => {
-        const { id } = req.params;
+      const { id } = req.params;
 
-	const actors = await Actor.findOne({ where: { id } });
+      const actors = await Actor.findOne({ where: { id } });
 
-	if (!actors) {
-		return next(new AppError(`This Actor doesn't exist`, 404));
-	}
+      if (!actors) {
+        return next(new AppError(`This Actor doesn't exist`, 404));
+      }
 
-	res.status(200).json({
-		status: 'success',
-		data: { actors },
-	});
+      res.status(200).json({
+        status: 'success',
+        data: { actors },
+      });
 });
 
 // Create new actor
 exports.createNewActor = catchAsync(
   async (req, res, next) => {
-    const { name, country, age } = req.body;
+  const { name, country, age } = req.body;
 
 	const newActor = await Actor.create({ name, country, age  });
 
@@ -56,12 +55,12 @@ exports.createNewActor = catchAsync(
 		status: 'success',
 		data: { newActor },
 	});
-  });
+});
 
 // Update 
 exports.updateActor = catchAsync(
     async (req, res, next) => {
-        const { id } = req.params;
+      const { id } = req.params;
 	    const { name, country, age } = req.body;
 
 	const actor = await Actor.findOne({ where: { id } });
