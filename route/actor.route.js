@@ -9,10 +9,13 @@ const {
         getActorById,
      } = require('../controllers/actor.controller')
 
+//Midleware
+const { validateSassion } = require('../middleware/validates.middleware')
+
 const router = express.Router();
 
 router.route('/')
-    .get(getAllActors)
+    .get(validateSassion, getAllActors)
     .post(createNewActor)
 
 router.route('/:id')

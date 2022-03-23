@@ -1,22 +1,25 @@
 const express = require('express');
 
-//Controllers
 const { 
         getAllUsers,  
         updateUser, 
         createNewUser,
+        loginUser,
         deleteUser, 
         getUserById,
      } = require('../controllers/user.controller')
 
+//Midleware
+const { validateSassion } = require('../middleware/validates.middleware')
+
 const router = express.Router();
 
 router.route('/')
-    .get(getAllUsers)
+    .get(validateSassion, getAllUsers)
     .post(createNewUser)
 
 router.route('/:id')
-    .get(getUserById)
+    .get(alidateSassion, getUserById)
     .patch(updateUser)
     .delete(deleteUser)
 
