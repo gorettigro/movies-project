@@ -1,4 +1,5 @@
 const express = require('express');
+const { body } = require('express-validator');
 
 const { 
         getAllUsers,  
@@ -10,17 +11,30 @@ const {
      } = require('../controllers/user.controller')
 
 //Midleware
-const { validateSassion } = require('../middleware/validates.middleware')
+const {
+    validateSession,
+    protectAdmin
+  } = require('../middlewares/validates.middleware');
+  const {
+    userExists,
+    protectAccountOwner
+  } = require('../middlewares/users.middleware');
 
 const router = express.Router();
 
-router.route('/')
-    .get(validateSassion, getAllUsers)
-    .post(createNewUser)
+router.post('/', createNewUser)
 
-router.route('/:id')
-    .get(alidateSassion, getUserById)
-    .patch(updateUser)
-    .delete(deleteUser)
+router.post('/login', loginUser)
+
+router.use(validateSession)
+
+router.get('/', protectAdmin, getAllUsers)
+
+router
+    .use('/:id', userExists)
+    .route('/:id')
+    .get(getUserById)
+    .patch(protectAccountOwner ,updateUser)
+    .delete(protectAccountOwner ,deleteUser)
 
 module.exports = {userRouter: router}

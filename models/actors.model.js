@@ -33,10 +33,9 @@ const Actor = db.define(
         status: {
 			type: DataTypes.STRING(15),
 			allowNull: false,
-			defaultValue: 'pending',
+			defaultValue: 'active',
 		}
 	},
-	{ timestamps: false }
 );
 
 module.exports = { Actor };

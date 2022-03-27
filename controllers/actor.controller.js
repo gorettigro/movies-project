@@ -1,22 +1,26 @@
-const dotenv = require('dotenv');
+const { ref, uploadBytes, getDownloadURL } = require('firebase/storage');
+const { validationResult } = require('express-validator');
 
 // Models
 const { Actor } = require('../models/actors.model');
+const { ActorsInMovies } = require('../models/actorsInMovies.model');
 
 // Utils
 const { catchAsync } = require('../util/catchAsync');
-const { AppError } = require('../util/appError');
-
-dotenv.config({ path: './config.env' });
+const { AppError } = require('../util/appError');const { filterObj } = require('../util/filterObj');
+const { filterObj } = require('../util/filterObj');
+const { storage } = require('../util/firebase');
+const { Movie } = require('../models/movie.model');
 
 // Get all actors
 exports.getAllUsers = catchAsync(
     async (req, res, next) => {
         const actors = await Actor.findAll({
-            where: { status: 'pending' },
+            where: { status: 'active' },
             include: [
                 {
-                    model: Actor,
+                    model: Movie,
+                    through: ActorsInMovies
                 },
             ],
         });
@@ -30,9 +34,9 @@ exports.getAllUsers = catchAsync(
 // Get actors by id
 exports.getActorById = catchAsync(
     async (req, res, next) => {
-      const { id } = req.params;
+      const { actor } = req;
 
-      const actors = await Actor.findOne({ where: { id } });
+      const actors = await Actor.findOne({ where: { actor } });
 
       if (!actors) {
         return next(new AppError(`This Actor doesn't exist`, 404));
@@ -47,9 +51,37 @@ exports.getActorById = catchAsync(
 // Create new actor
 exports.createNewActor = catchAsync(
   async (req, res, next) => {
-  const { name, country, age } = req.body;
+  const { name, country, rating, age } = req.body;
 
-	const newActor = await Actor.create({ name, country, age  });
+  // Validate req.body
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    const errorMsg = errors
+      .array()
+      .map(({ msg }) => msg)
+      .join('. ');
+
+    return next(new AppError(400, errorMsg));
+  }
+
+	// Upload img to firebase
+  const fileExtension = req.file.originalname.split('.')[1];
+
+  const imgRef = ref(
+    storage,
+    `imgs/actors/${name}-${Date.now()}.${fileExtension}`
+  );
+
+  const imgUploaded = await uploadBytes(imgRef, req.file.buffer);
+
+  const newActor = await Actor.create({
+    name,
+    country,
+    rating,
+    age,
+    profilePic: imgUploaded.metadata.fullPath
+  });
 
 	res.status(201).json({
 		status: 'success',
@@ -60,20 +92,12 @@ exports.createNewActor = catchAsync(
 // Update 
 exports.updateActor = catchAsync(
     async (req, res, next) => {
-      const { id } = req.params;
-	    const { name, country, age } = req.body;
+      const { actor } = req;
+      const data = filterObj(req.body, 'name', 'country', 'rating', 'age');
 
-	const actor = await Actor.findOne({ where: { id } });
-
-	if (!actor) {
-		return next(new AppError('This Actor does not exists', 404));
-	}
-
-	await actor.update({ name, country, age });
-
-	res.status(204).json({
-		status: 'success',
-	});
+      await actor.update({ ...data });
+    
+      res.status(204).json({ status: 'success' });
 });
 
 //Delete Actor 

@@ -19,14 +19,14 @@ const Reviews = db.define(
 			allowNull: false
 		},
         rating: {
-			type: DataTypes.NUMBER(255),
+			type: DataTypes.INTEGER,
 			allowNull: false,
 			defaultValue: 1
 		},
 		status: {
 			type: DataTypes.STRING(15),
 			allowNull: false,
-			defaultValue: 'pending',
+			defaultValue: 'active',
 		},
         userId: {
 			type: DataTypes.INTEGER,
@@ -37,7 +37,6 @@ const Reviews = db.define(
 			allowNull: false,
 		}
 	},
-	{ timestamps: false }
 );
 
 module.exports = { Reviews };

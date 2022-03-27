@@ -16,6 +16,7 @@ const Users = db.define(
 		},
         email: {
 			type: DataTypes.STRING(255),
+			allowNull: false,
 			unique: true
 		},
         password: {
@@ -25,14 +26,14 @@ const Users = db.define(
 		status: {
 			type: DataTypes.STRING(15),
 			allowNull: false,
-			defaultValue: 'pending',
+			defaultValue: 'active',
 		},
         role: {
 			type: DataTypes.STRING(10),
 			allowNull: false,
+			defaultValue: 'guest'
 		}
 	},
-	{ timestamps: false }
 );
 
 module.exports = { Users };

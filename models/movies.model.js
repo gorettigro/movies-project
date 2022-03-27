@@ -12,9 +12,11 @@ const Movies = db.define(
 		},
 		tittle: {
 			type: DataTypes.STRING(255),
+			allowNull: false
 		},
         description: {
 			type: DataTypes.STRING(255),
+			allowNull: false
 		},
         duration: {
 			type: DataTypes.NUMBER(5),
@@ -37,7 +39,7 @@ const Movies = db.define(
 		status: {
 			type: DataTypes.STRING(15),
 			allowNull: false,
-			defaultValue: 'pending',
+			defaultValue: 'active',
 		}
 	},
 	{ timestamps: false }
