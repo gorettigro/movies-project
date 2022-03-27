@@ -1,5 +1,5 @@
 // Models
-const { Movie } = require('../models/movie.model');
+const { Movie } = require('../models/movies.model');
 
 // Utils
 const { AppError } = require('../util/appError');

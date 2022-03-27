@@ -5,9 +5,9 @@ const express = require('express');
 const { globalErrorHandler } = require('./controllers/error.controller');
 
 // Routers
-const { usersRouter } = require('./routes/users.routes');
-const { actorsRouter } = require('./routes/actors.routes');
-const { moviesRouter } = require('./routes/movies.routes');
+const { usersRouter } = require('./route/user.route');
+const { actorsRouter } = require('./route/actor.route');
+const { moviesRouter } = require('./route/movie.route');
 
 const app = express();
 

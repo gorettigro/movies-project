@@ -2,7 +2,7 @@ const { ref, uploadBytes, getDownloadURL } = require('firebase/storage');
 const { validationResult } = require('express-validator');
 // Models
 const { Movie } = require('../models/movies.model');
-const { Actor } = require('../models/actor.model');
+const { Actor } = require('../models/actors.model');
 const { ActorsInMovies } = require('../models/actorsInMovies.model');
 
 // Utils
@@ -49,7 +49,7 @@ exports.getMovieById = catchAsync(
 // Create new movie
 exports.createNewMovie = catchAsync(
   async (req, res, next) => {
-    const { title, description, duration, rating, genre, actrs} = req.body;
+    const { title, description, duration, rating, genre, actors} = req.body;
 
     const errors = validationResult(req);
 
@@ -81,7 +81,7 @@ exports.createNewMovie = catchAsync(
 
     const actorsInMoviesPromises = actors.map(async (actorId) => {
       // Assign actors to newly created movie
-      return await ActorInMovie.create({ actorId, movieId: newMovie.id });
+      return await ActorsInMovies.create({ actorId, movieId: newMovie.id });
     });
   
     await Promise.all(actorsInMoviesPromises);

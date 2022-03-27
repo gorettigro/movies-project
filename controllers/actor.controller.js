@@ -10,7 +10,7 @@ const { catchAsync } = require('../util/catchAsync');
 const { AppError } = require('../util/appError');const { filterObj } = require('../util/filterObj');
 const { filterObj } = require('../util/filterObj');
 const { storage } = require('../util/firebase');
-const { Movie } = require('../models/movie.model');
+const { Movie } = require('../models/movies.model');
 
 // Get all actors
 exports.getAllUsers = catchAsync(

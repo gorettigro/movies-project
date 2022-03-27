@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 
 // Models
-const { User } = require('../models/user.model');
+const { User } = require('../models/users.model');
 
 // Utils
 const { AppError } = require('../util/appError');
