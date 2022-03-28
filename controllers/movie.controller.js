@@ -80,7 +80,6 @@ exports.createNewMovie = catchAsync(
       genre});
 
     const actorsInMoviesPromises = actors.map(async (actorId) => {
-      // Assign actors to newly created movie
       return await ActorsInMovies.create({ actorId, movieId: newMovie.id });
     });
   

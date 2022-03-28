@@ -61,11 +61,6 @@ router.route('/')
         ],
         createNewMovie)
 
-// BONUS
-// router.route('/reviews').get().post();
-
-// router.route('/reviews/:movieId').get().patch().delete();
-
 router
     .use('/:id', this.movieExists)
     .route('/:id')
