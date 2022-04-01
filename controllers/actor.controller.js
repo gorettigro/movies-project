@@ -19,8 +19,7 @@ exports.getAllUsers = catchAsync(
             where: { status: 'active' },
             include: [
                 {
-                    model: Movie,
-                    through: ActorsInMovies
+                    model: Movie
                 },
             ],
         });
@@ -36,15 +35,9 @@ exports.getActorById = catchAsync(
     async (req, res, next) => {
       const { actor } = req;
 
-      const actors = await Actor.findOne({ where: { actor } });
-
-      if (!actors) {
-        return next(new AppError(`This Actor doesn't exist`, 404));
-      }
-
       res.status(200).json({
         status: 'success',
-        data: { actors },
+        data: { actor },
       });
 });
 
@@ -52,18 +45,6 @@ exports.getActorById = catchAsync(
 exports.createNewActor = catchAsync(
   async (req, res, next) => {
   const { name, country, rating, age } = req.body;
-
-  // Validate req.body
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    const errorMsg = errors
-      .array()
-      .map(({ msg }) => msg)
-      .join('. ');
-
-    return next(new AppError(400, errorMsg));
-  }
 
 	// Upload img to firebase
   const fileExtension = req.file.originalname.split('.')[1];
@@ -103,25 +84,9 @@ exports.updateActor = catchAsync(
 //Delete Actor 
 exports.deleteActor = catchAsync(
     async (req, res) => {
-        try {
-            const { id } = req.params;
-        
-            const actor = await Actor.findOne({
-              where: { id: id, status: 'active' }
-            });
-        
-            if (!actor) {
-              res.status(404).json({
-                status: 'error',
-                message: 'Cant delete actor, invalid ID'
-              });
-              return;
-            }
-        
-            await actor.update({ status: 'deleted' });
-        
-            res.status(204).json({ status: 'success' });
-          } catch (error) {
-            console.log(error);
-          }
+      const { actor } = req;
+
+      await actor.update({ status: 'deleted' });
+    
+      res.status(204).json({ status: 'success' });
 	});

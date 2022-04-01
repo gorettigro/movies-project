@@ -1,5 +1,5 @@
 const { ref, uploadBytes, getDownloadURL } = require('firebase/storage');
-const { validationResult } = require('express-validator');
+
 // Models
 const { Movie } = require('../models/movies.model');
 const { Actor } = require('../models/actors.model');
@@ -32,34 +32,18 @@ exports.getAllMovies = catchAsync(
 // Get movie by id
 exports.getMovieById = catchAsync(
     async (req, res, next) => {
-        const { id } = req.params;
+        const { movie } = req;
 
-	const movie = await Movie.findOne({ where: { id } });
-
-	if (!movie) {
-		return next(new AppError(`This movie doesn't exist`, 404));
-	}
-
-	res.status(200).json({
-		status: 'success',
-		data: { movie },
-	});
+        res.status(200).json({
+          status: 'success',
+          data: { movie },
+          });
     });
 
 // Create new movie
 exports.createNewMovie = catchAsync(
   async (req, res, next) => {
     const { title, description, duration, rating, genre, actors} = req.body;
-
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      const errorMsg = errors
-        .array()
-        .map(({ msg }) => msg)
-        .join('. ');
-      return next(new AppError(400, errorMsg));
-    }
   
     // Upload img to firebase
     const fileExtension = req.file.originalname.split('.')[1];
@@ -107,9 +91,9 @@ exports.updateMovie = catchAsync(
       
         await movie.update({ ...data });
 
-	res.status(204).json({
-		status: 'success',
-	});
+	  res.status(204).json({
+		  status: 'success',
+	  });
 });
 
 //Delete movie 

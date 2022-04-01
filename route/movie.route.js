@@ -15,7 +15,7 @@ const {
     validateSession,
     protectAdmin
   } = require('../middlewares/validates.middleware');
-
+const {createMovieValidators,validateResult} = require('../middlewares/validators.middleware');  
 const { movieExists } = require('../middlewares/movies.middleware');
 
 const { upload } = require('../util/multer');
@@ -29,36 +29,8 @@ router.route('/')
     .post(
         protectAdmin,
         upload.single('img'),
-        [
-            body('title')
-                .isString()
-                .withMessage('Title must be a string')
-                .notEmpty()
-                .withMessage('Must provide a valid title'),
-            body('description')
-                .isString()
-                .withMessage('Description must be a string')
-                .notEmpty()
-                .withMessage('Must provide a valid description'),
-            body('duration')
-                .isNumeric()
-                .withMessage('Duration must be a number')
-                .custom((value) => value > 0)
-                .withMessage('Duration must be greater than 0'),
-            body('rating')
-                .isNumeric()
-                .withMessage('Rating must be a number')
-                .custom((value) => value > 0 && value <= 5)
-                .withMessage('Rating must be between 1 and 5'),
-            body('genre')
-                .isString()
-                .withMessage('Genre must be a string')
-                .notEmpty()
-                .withMessage('Must provide a valid genre'),
-            body('actors')
-                .isArray({ min: 1 })
-                .withMessage('Must provide at least one actor id')
-        ],
+         createMovieValidators,
+        validateResult,
         createNewMovie)
 
 router
